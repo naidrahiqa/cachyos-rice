@@ -1,0 +1,2 @@
+#!/bin/bash
+cliphist list 2>/dev/null | wofi --dmenu --prompt "Clipboard" --width 600 --height 400 | cliphist decode 2>/dev/null | wl-copy

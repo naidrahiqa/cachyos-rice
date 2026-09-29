@@ -1,0 +1,56 @@
+#!/bin/bash
+
+HYPR_DIR="$HOME/.config/hypr"
+CACHEOS_DIR="$HOME/.config/hypr.cachyos"
+CAELSTIA_DIR="$HOME/.config/hypr.caelstia"
+
+case "$1" in
+    cachyos|default)
+        if [ ! -d "$CACHEOS_DIR" ]; then
+            echo "Error: $CACHEOS_DIR not found"
+            exit 1
+        fi
+        # Save current caelestia if active
+        if [ -f "$HYPR_DIR/variables.lua" ] && [ -d "$CAELSTIA_DIR" ]; then
+            rm -rf "$CAELSTIA_DIR"
+            cp -r "$HYPR_DIR" "$CAELSTIA_DIR"
+        fi
+        rm -rf "$HYPR_DIR"
+        cp -r "$CACHEOS_DIR" "$HYPR_DIR"
+        echo "Switched to: CachyOS (Hyprland default)"
+        ;;
+    caelestia)
+        if [ ! -d "$CAELSTIA_DIR" ]; then
+            echo "Error: $CAELSTIA_DIR not found"
+            exit 1
+        fi
+        # Save current cachyos if active
+        if [ ! -f "$HYPR_DIR/variables.lua" ] && [ -d "$CACHEOS_DIR" ]; then
+            rm -rf "$CACHEOS_DIR"
+            cp -r "$HYPR_DIR" "$CACHEOS_DIR"
+        fi
+        rm -rf "$HYPR_DIR"
+        cp -r "$CAELSTIA_DIR" "$HYPR_DIR"
+        echo "Switched to: Caelstia"
+        ;;
+    status)
+        if [ -f "$HYPR_DIR/variables.lua" ]; then
+            echo "Current: Caelstia"
+        else
+            echo "Current: CachyOS (Hyprland default)"
+        fi
+        ;;
+    *)
+        echo "Usage: switch-hypr [cachyos|caelestia|status]"
+        echo ""
+        echo "  cachyos   - Switch to CachyOS Hyprland config"
+        echo "  caelestia - Switch to Caelstia config"
+        echo "  status    - Show current profile"
+        exit 1
+        ;;
+esac
+
+# Reload hyprland if running
+if command -v hyprctl &> /dev/null; then
+    hyprctl reload 2>/dev/null && echo "Hyprland reloaded!" || echo "Note: reload manually after switching"
+fi

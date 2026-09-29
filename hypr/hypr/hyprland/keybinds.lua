@@ -1,1 +1,0 @@
-/home/naidrahiqa/.local/state/caelestia/dots/hypr/hyprland/keybinds.lua

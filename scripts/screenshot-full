@@ -1,0 +1,4 @@
+#!/bin/bash
+DIR="$HOME/Pictures/Screenshots"
+FILE="$DIR/screenshot-$(date +%Y%m%d-%H%M%S).png"
+grim "$FILE" 2>/dev/null && wl-copy < "$FILE" && notify-send -t 2000 "Screenshot saved & copied" "$(basename $FILE)"

@@ -1,0 +1,75 @@
+# GRUB Theme - Naidra Edition
+
+desktop-image: "background.jpg"
+
+title-text:" "
+message-color: "#e5e1e7"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
++label{
+text = "Welcome Back"
+font = "JetBrains Mono Bold 48"
+color = "#ffffff"
+left = 50%-200
+top = 6%
+height = 30
+width = 400
+align = "center"
+}
+
++label{
+text = "Choose your system"
+font = "JetBrains Mono Regular 16"
+color = "#ffffff"
+top = 16%
+left = 50%-80
+align = "center"
+width = 160
+height = 40
+}
+
++ boot_menu {
+  left = 30%
+  width = 40%
+  top = 25%
+  height = 45%
+  icon_width = 32
+  icon_height = 32
+  item_height = 50
+  item_padding = 10
+  item_icon_space = 12
+  item_spacing = 6
+  menu_pixmap_style = "boot_menu_*.png"
+  item_font = "JetBrains Mono Regular 16"
+  item_color = "#ffffff"
+  item_bg_color = "rgba(0,0,0,0.5)"
+  selected_item_color = "#ffffff"
+  selected_item_pixmap_style = "select_bkg_*.png"
+  scrollbar = true
+  scrollbar_width = 8
+  scrollbar_thumb = "slider_*.png"
+}
+
++ image {
+  top = 80%+47
+  left = 50%-240
+  width = 480
+  height = 42
+  file = "menu.png"
+}
+
++ progress_bar {
+  id = "__timeout__"
+  left = 30%
+  width = 40%
+  top = 95%
+  height = 20
+  show_text = true
+  text_color = "255, 255, 255"
+  bar_style = "progress_bar_*.png"
+  highlight_style = "progress_highlight_*.png"
+}

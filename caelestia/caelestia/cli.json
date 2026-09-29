@@ -1,5 +1,0 @@
-{
-    "wallpaper": {
-        "postHook": "sync-sddm-scheme"
-    }
-}

@@ -1,0 +1,41 @@
+{
+    "appearance": {
+        "transparency": {
+            "base": 0.6,
+            "enabled": true,
+            "layers": 0.48
+        }
+    },
+    "background": {
+        "wallpaperEnabled": true,
+        "desktopClock": {
+            "background": {
+                "blur": true,
+                "enabled": true,
+                "opacity": 0.92
+            },
+            "enabled": true,
+            "invertColors": false,
+            "position": "bottom-right",
+            "scale": 0.6
+        }
+    },
+    "general": {
+        "apps": {
+            "terminal": ["kitty"]
+        }
+    },
+    "lock": {
+        "enabled": true,
+        "useWallpaper": true,
+        "hideNotifs": false,
+        "recolourLogo": true
+    },
+    "notifs": {
+        "actionOnClick": false,
+        "openExpanded": true
+    },
+    "services": {
+        "defaultPlayer": "Brave"
+    }
+}

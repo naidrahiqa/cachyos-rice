@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Caelestia
+Comment=Caelstia rice for Hyprland
+Exec=/usr/local/bin/start-hyprland-caelestia
+Type=Application
+DesktopNames=Hyprland
+Keywords=tiling;wayland;compositor;rice;
