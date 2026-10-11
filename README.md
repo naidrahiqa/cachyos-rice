@@ -1,21 +1,21 @@
 # EndeavourOS / CachyOS Rice & Dotfiles
 
-Ricing **Caelestia + Hyprland** oleh **naidrahiqa**.
+Ricing **Caelestia + Hyprland** by **naidrahiqa**.
 
-## 📁 Struktur
+## 📁 Structure
 
-| Folder | Isi |
-|--------|-----|
-| `hypr/` | Config Hyprland (keybinds, animations, rules, scheme Material You) |
-| `caelestia/` | Config Caelestia shell (shell.json, hypr-vars, monitors) |
-| `quickshell/` | Full Caelestia QuickShell (lock screen, notif, bar, launcher, dll) |
+| Folder | Contents |
+|--------|----------|
+| `hypr/` | Hyprland config (keybinds, animations, rules, Material You scheme) |
+| `caelestia/` | Caelestia shell config (shell.json, hypr-vars, monitors) |
+| `quickshell/` | Full Caelestia QuickShell (lock screen, notifications, bar, launcher, etc.) |
 | `kitty/` | Kitty terminal theme (Material You) |
 | `foot/` | Foot terminal theme (Material You) |
 | `grub/` | GRUB theme (JetBrains Mono font, Material You colors) |
 | `wofi/` | Clipboard picker style (SUPER+V) |
 | `fuzzel/` | Fuzzel launcher style |
 | `gtk/` | GTK icon/cursor settings |
-| `scripts/` | Screenshot, clipboard, profile switcher scripts |
+| `scripts/` | Screenshot, clipboard, and profile switcher scripts |
 
 ## 🚀 Install
 
@@ -55,7 +55,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 ## 📸 Preview
 
-Ricing includes:
+The rice includes:
 - **Lock screen** — Material You clock, profile pic, password input
 - **Notifications** — Material You cards, swipe to dismiss
 - **GRUB** — custom theme + JetBrains Mono font + anime wallpaper
@@ -64,7 +64,7 @@ Ricing includes:
 - **Screenshot** — auto-save + auto-copy to clipboard
 - **Profile switcher** — Hyprland (CachyOS) vs Caelestia at login
 
-## ⌨️ Keybinds Penting
+## ⌨️ Important Keybinds
 
 | Key | Action |
 |-----|--------|
