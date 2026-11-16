@@ -14,6 +14,55 @@ PageBase {
 
     title: qsTr("Network")
 
+    // Latest text of the hotspot fields, kept here so saves work even while
+    // the page (and its rows) are being torn down.
+    property string pendingHotspotSsid: Nmcli.hotspotSsid
+    property string pendingHotspotPass: Nmcli.hotspotPass
+
+    // The hotspot section only exists if the "Hotspot" connection is present.
+    readonly property bool hotspotAvailable: Nmcli.savedConnections.indexOf(Nmcli.hotspotConnectionName) >= 0
+
+    function saveHotspot(): void {
+        const ssid = root.pendingHotspotSsid.trim();
+        const pass = root.pendingHotspotPass;
+
+        if (ssid.length < 1 || ssid.length > 32) {
+            if (hotspotSsidRow)
+                hotspotSsidRow.field.isError = true;
+            return;
+        }
+        if (pass.length < 8 || pass.length > 63) {
+            if (hotspotPassRow)
+                hotspotPassRow.field.isError = true;
+            return;
+        }
+        if (hotspotSsidRow)
+            hotspotSsidRow.field.isError = false;
+        if (hotspotPassRow)
+            hotspotPassRow.field.isError = false;
+
+        if (ssid === Nmcli.hotspotSsid && pass === Nmcli.hotspotPass)
+            return;
+
+        Nmcli.saveHotspotSettings(ssid, pass, result => {
+            if (result && !result.success) {
+                // Revert the fields to what is actually stored.
+                Nmcli.loadHotspotSettings(() => {
+                    root.pendingHotspotSsid = Nmcli.hotspotSsid;
+                    root.pendingHotspotPass = Nmcli.hotspotPass;
+                    if (hotspotSsidRow)
+                        hotspotSsidRow.field.text = Nmcli.hotspotSsid;
+                    if (hotspotPassRow) {
+                        hotspotPassRow.field.text = Nmcli.hotspotPass;
+                        hotspotPassRow.field.isError = true;
+                    }
+                });
+            } else if (hotspotPassRow) {
+                hotspotPassRow.field.isError = false;
+            }
+        });
+    }
+
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
@@ -109,6 +158,62 @@ PageBase {
             text: qsTr("Add network")
             disabled: !Nmcli.wifiEnabled
             onClicked: root.nState.openSubPage(2) // Add network sub-page
+        }
+
+        // ---- Mobile hotspot --------------------------------------------------
+        SectionHeader {
+            visible: root.hotspotAvailable
+            text: qsTr("Mobile hotspot")
+        }
+
+        ToggleRow {
+            id: hotspotToggle
+
+            visible: root.hotspotAvailable
+            first: true
+            text: qsTr("Share internet via Wi-Fi")
+            subtext: qsTr("Broadcast a hotspot using this device's connection")
+            checked: Nmcli.hotspotActive
+            disabled: Nmcli.hotspotBusy || !Nmcli.wifiEnabled
+            onToggled: Nmcli.toggleHotspot(() => {
+                // Re-establish the binding so the switch keeps following the
+                // real state (toggling breaks a declarative binding).
+                hotspotToggle.checked = Qt.binding(() => Nmcli.hotspotActive);
+            }, checked)
+        }
+
+        TextFieldRow {
+            id: hotspotSsidRow
+
+            visible: root.hotspotAvailable
+            label: qsTr("Network name (SSID)")
+            subtext: qsTr("1-32 characters")
+            value: root.pendingHotspotSsid
+            maximumLength: 32
+            errorText: qsTr("SSID must be 1-32 characters")
+            onValueEdited: value => root.pendingHotspotSsid = value
+            onEditingFinished: value => {
+                root.pendingHotspotSsid = value;
+                root.saveHotspot();
+            }
+        }
+
+        TextFieldRow {
+            id: hotspotPassRow
+
+            visible: root.hotspotAvailable
+            last: true
+            label: qsTr("Password")
+            subtext: qsTr("At least 8 characters")
+            value: root.pendingHotspotPass
+            maximumLength: 63
+            echoMode: TextInput.Password
+            errorText: qsTr("Password must be 8-63 characters")
+            onValueEdited: value => root.pendingHotspotPass = value
+            onEditingFinished: value => {
+                root.pendingHotspotPass = value;
+                root.saveHotspot();
+            }
         }
 
         // ---- VPN -------------------------------------------------------------

@@ -17,6 +17,9 @@ ConnectedRect {
     property alias placeholderText: input.placeholderText
     property string errorText
     property alias maximumLength: input.maximumLength
+    property int echoMode: TextInput.Normal
+    property bool passwordVisible: false
+    readonly property bool isPassword: echoMode === TextInput.Password
     property alias validate: input.validate
     property alias validator: input.validator
     property bool smallField
@@ -79,6 +82,12 @@ ConnectedRect {
             verticalPadding: Tokens.padding.small
 
             text: root.value
+            echoMode: root.isPassword && root.passwordVisible ? TextInput.Normal : root.echoMode
+
+            // Eye toggle for password fields.
+            trailingIcon: root.isPassword ? (root.passwordVisible ? "visibility_off" : "visibility") : ""
+            trailingClickable: root.isPassword
+            onTrailingClicked: root.passwordVisible = !root.passwordVisible
 
             onTextEdited: root.valueEdited(text)
             onEditingFinished: root.editingFinished(text)

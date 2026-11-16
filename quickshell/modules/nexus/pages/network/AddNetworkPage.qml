@@ -18,6 +18,7 @@ PageBase {
     property bool connecting: false
     property bool failed: false
     property bool success: false
+    property bool passwordVisible: false
 
     function submit(): void {
         const ssid = ssidField.text.trim();
@@ -172,7 +173,10 @@ PageBase {
                 enabled: root.secured
                 placeholderText: qsTr("Password")
                 leadingIcon: "key"
-                echoMode: TextInput.Password
+                echoMode: root.secured && !root.passwordVisible ? TextInput.Password : TextInput.Normal
+                trailingIcon: root.secured ? (root.passwordVisible ? "visibility_off" : "visibility") : ""
+                trailingClickable: root.secured
+                onTrailingClicked: root.passwordVisible = !root.passwordVisible
                 supportingText: qsTr("WPA passwords are at least 8 characters")
                 errorText: root.failed ? qsTr("Connection failed — check the password") : qsTr("Password must be at least 8 characters")
 

@@ -24,6 +24,14 @@ Singleton {
     // Map of saved Wi-Fi SSID (lowercased) -> security type
     property var savedConnectionSecurity: ({})
 
+    // Mobile hotspot (NetworkManager "Hotspot" connection)
+    readonly property string hotspotConnectionName: "Hotspot"
+    property bool hotspotActive: false
+    property bool hotspotBusy: false
+    property string hotspotSsid: ""
+    property string hotspotPass: ""
+    property var pendingHotspotSave: null
+
     property var wifiConnectionQueue: []
     property int currentSsidQueryIndex: 0
     property var pendingConnection: null
@@ -918,6 +926,105 @@ Singleton {
         enableWifi(newState, callback);
     }
 
+    function refreshHotspotStatus(callback: var): void {
+        executeCommand(["-t", "-f", "NAME,STATE", root.nmcliCommandConnection, "show", "--active"], result => {
+            let active = false;
+            if (result.success) {
+                const lines = result.output.trim().split("\n");
+                for (const line of lines) {
+                    const parts = line.split(":");
+                    if (parts[0] === root.hotspotConnectionName) {
+                        active = (parts[1] || "").trim() === "activated";
+                        break;
+                    }
+                }
+            }
+            root.hotspotActive = active;
+            if (callback)
+                callback(active);
+        });
+    }
+
+    function toggleHotspot(callback: var, target: var): void {
+        if (root.hotspotBusy)
+            return;
+        root.hotspotBusy = true;
+        const turnOn = target === undefined || target === null ? !root.hotspotActive : !!target;
+        const action = turnOn ? "up" : "down";
+        executeCommand([root.nmcliCommandConnection, action, root.hotspotConnectionName], result => {
+            refreshHotspotStatus(() => {
+                root.hotspotBusy = false;
+                if (callback)
+                    callback(result);
+            });
+        });
+    }
+
+    function loadHotspotSettings(callback: var): void {
+        executeCommand(["-t", "-s", "-f", "802-11-wireless.ssid", root.nmcliCommandConnection, "show", root.hotspotConnectionName], ssidResult => {
+            if (ssidResult.success) {
+                const val = ssidResult.output.trim().split(":").slice(1).join(":");
+                if (val.length > 0)
+                    root.hotspotSsid = val;
+            }
+            executeCommand(["-t", "-s", "-f", "802-11-wireless-security.psk", root.nmcliCommandConnection, "show", root.hotspotConnectionName], pskResult => {
+                if (pskResult.success) {
+                    const val = pskResult.output.trim().split(":").slice(1).join(":");
+                    if (val.length > 0)
+                        root.hotspotPass = val;
+                }
+                if (callback)
+                    callback();
+            });
+        });
+    }
+
+    function saveHotspotSettings(ssid: string, pass: string, callback: var): void {
+        if (root.hotspotBusy) {
+            root.pendingHotspotSave = {
+                ssid: ssid,
+                pass: pass,
+                callback: callback
+            };
+            return;
+        }
+        root.hotspotBusy = true;
+        const wasActive = root.hotspotActive;
+
+        const finish = result => {
+            root.hotspotBusy = false;
+            if (callback)
+                callback(result);
+            if (root.pendingHotspotSave) {
+                const pending = root.pendingHotspotSave;
+                root.pendingHotspotSave = null;
+                Qt.callLater(() => saveHotspotSettings(pending.ssid, pending.pass, pending.callback));
+            }
+        };
+
+        executeCommand([root.nmcliCommandConnection, "modify", root.hotspotConnectionName,
+            "802-11-wireless.ssid", ssid,
+            "802-11-wireless-security.psk", pass], modResult => {
+            if (!modResult.success) {
+                finish(modResult);
+                return;
+            }
+            root.hotspotSsid = ssid;
+            root.hotspotPass = pass;
+
+            if (!wasActive) {
+                finish(modResult);
+                return;
+            }
+            // Restart the hotspot so the new SSID/pass takes effect.
+            executeCommand([root.nmcliCommandConnection, "down", root.hotspotConnectionName], () => {
+                executeCommand([root.nmcliCommandConnection, "up", root.hotspotConnectionName], upResult => {
+                    refreshHotspotStatus(() => finish(upResult));
+                });
+            });
+        });
+    }
+
     function getWifiStatus(callback: var): void {
         executeCommand([root.nmcliCommandRadio, root.nmcliCommandWifi], result => {
             if (result.success) {
@@ -1371,6 +1478,7 @@ Singleton {
     }
 
     function refreshOnConnectionChange(): void {
+        refreshHotspotStatus(() => {});
         getNetworks(networks => {
             const newActive = root.active;
 
@@ -1415,6 +1523,8 @@ Singleton {
         getNetworks(() => {});
         loadSavedConnections(() => {});
         getEthernetInterfaces(() => {});
+        refreshHotspotStatus(() => {});
+        loadHotspotSettings(() => {});
 
         Qt.callLater(() => {
             if (root.wirelessInterfaces.length > 0) {

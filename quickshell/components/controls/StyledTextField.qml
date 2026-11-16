@@ -26,6 +26,8 @@ TextFieldBase {
 
     property string leadingIcon
     property string trailingIcon
+    property bool trailingClickable
+    signal trailingClicked()
     readonly property int leadingOffset: leadingIcon ? leadingIconLoader.width + leadingIconLoader.anchors.leftMargin : 0
     readonly property int trailingOffset: trailingIcon ? trailingIconLoader.width + trailingIconLoader.anchors.rightMargin : 0
 
@@ -171,6 +173,22 @@ TextFieldBase {
                 color: Colours.palette.m3onSurfaceVariant
                 fontStyle: Tokens.font.icon.builders.medium.scale(0.9).build()
             }
+        }
+
+        MouseArea {
+            id: trailingClickArea
+
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: Tokens.padding.medium - Tokens.padding.small
+            width: trailingIconLoader.width + Tokens.padding.small * 2
+            height: trailingIconLoader.height + Tokens.padding.small * 2
+            visible: root.trailingClickable && root.trailingIcon
+            enabled: visible
+            cursorShape: Qt.PointingHandCursor
+            preventStealing: true
+
+            onClicked: root.trailingClicked()
         }
     }
 
