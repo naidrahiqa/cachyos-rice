@@ -1,0 +1,100 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
+  // Material You colours, pulled from the active Caelestia scheme.
+  // Regenerate alongside the wallpaper with: caelestia wallpaper -f <path>
+  "logo": {
+    "source": "CachyOS",
+    "color": {
+      "1": "#9bd0cc", // primary
+      "2": "#d5efff" // tertiary
+    },
+    "padding": {
+      "top": 1,
+      "right": 3
+    }
+  },
+
+  "display": {
+    "separator": "  ",
+    "color": {
+      "keys": "#b0ccc9",
+      "title": "#9bd0cc"
+    },
+    "key": {
+      "width": 12,
+      "align": "left"
+    }
+  },
+
+  "modules": [
+    "title",
+    "separator",
+    {
+      "type": "os",
+      "key": "OS",
+      "format": "{2} {1}"
+    },
+    {
+      "type": "host",
+      "key": "Host"
+    },
+    {
+      "type": "kernel",
+      "key": "Kernel"
+    },
+    {
+      "type": "uptime",
+      "key": "Uptime"
+    },
+    {
+      "type": "packages",
+      "key": "Packages"
+    },
+    {
+      "type": "shell",
+      "key": "Shell"
+    },
+    {
+      "type": "display",
+      "key": "Resolution"
+    },
+    {
+      "type": "wm",
+      "key": "WM"
+    },
+    {
+      "type": "terminal",
+      "key": "Terminal"
+    },
+    {
+      "type": "cpu",
+      "key": "CPU",
+      "format": "{1}"
+    },
+    {
+      "type": "gpu",
+      "key": "GPU",
+      "format": "{1}"
+    },
+    {
+      "type": "memory",
+      "key": "Memory"
+    },
+    {
+      "type": "disk",
+      "key": "Disk"
+    },
+    {
+      "type": "battery",
+      "key": "Battery",
+      "format": "{1} {2}"
+    },
+    {
+      "type": "locale",
+      "key": "Locale"
+    },
+    "break",
+    "colors"
+  ]
+}

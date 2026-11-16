@@ -112,6 +112,39 @@ Login sessions:
 - `hyprland.desktop` → Hyprland (CachyOS)
 - `hyprland-caelestia.desktop` → Caelestia
 
+## ⚡ fastfetch
+
+Config: `~/.config/fastfetch/config.jsonc` (repo: `fastfetch/config.jsonc`)
+
+- Logo CachyOS dengan warna scheme aktif (primary `#9bd0cc`, tertiary `#d5efff`)
+- Keys `#b0ccc9`, title `#9bd0cc`, key width 12
+- Module: OS, Host, Kernel, Uptime, Packages, Shell, Resolution, WM, Terminal, CPU, GPU, Memory, Disk, Battery, Locale
+- Catatan: colour code wajib prefix `#` (tanpa `#` → error `invalid color code`)
+
+## 🐟 Starship Prompt (Fish)
+
+- Binary: `~/.local/bin/starship` (v1.27.0)
+- Config: `~/.config/starship.toml` (repo: `starship/starship.toml`)
+- Init di `~/.config/fish/config.fish` (repo: `fish/config.fish`):
+  ```fish
+  if type -q starship
+      starship init fish | source
+  end
+  ```
+- Modules: directory, git branch/status, python/nodejs/rust/golang/java, cmd_duration, status, character
+- Warna ikut scheme aktif — update setelah `caelestia wallpaper -f <path>`
+
+## 🪟 Window Rules (per-app)
+
+Config: `~/.config/hypr/hyprland/rules.lua` (repo: `hypr/hyprland/rules.lua`)
+
+- **kitty** — opacity `0.85 override` (transparan, wallpaper blur kelihatan)
+- **Browser** (`brave.*`, `firefox`) — opaque, teks crisp saat scroll
+- **Render-heavy** (OBS, VirtualBox, GNS3, Ghidra, PrismLauncher) — opaque, no blur artifact
+- **Utility kecil** (Calculator, scrcpy, Meld) — float + center
+- Pakai sistem tag yang ada: `tagged_rule(...)` + `create_tag(...)`
+- Verifikasi: `hyprctl clients` → baris `tags: opaque*`
+
 ## 📦 Packages Required
 
 ```bash
@@ -131,5 +164,5 @@ ttf-jetbrains-mono-nerd ttf-font-awesome
 papirus-icon-theme bibata-cursor-theme
 
 # Extras
-file-roller thunar-archive-plugin swww
+file-roller thunar-archive-plugin swww fastfetch starship
 ```

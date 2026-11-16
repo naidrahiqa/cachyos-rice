@@ -15,6 +15,9 @@ Ricing **Caelestia + Hyprland** by **naidrahiqa**.
 | `wofi/` | Clipboard picker style (SUPER+V) |
 | `fuzzel/` | Fuzzel launcher style |
 | `gtk/` | GTK icon/cursor settings |
+| `fastfetch/` | fastfetch config (CachyOS logo, Material You colours) |
+| `starship/` | Starship prompt config (Material You colours) |
+| `fish/` | Fish shell config (starship init) |
 | `scripts/` | Screenshot, clipboard, and profile switcher scripts |
 
 ## 🚀 Install
@@ -32,6 +35,10 @@ cp kitty/kitty.conf ~/.config/kitty/
 cp foot/foot.ini ~/.config/foot/
 cp wofi/style.css ~/.config/wofi/
 cp fuzzel/fuzzel.ini ~/.config/fuzzel/
+mkdir -p ~/.config/fastfetch
+cp fastfetch/config.jsonc ~/.config/fastfetch/
+cp starship/starship.toml ~/.config/starship.toml
+cp fish/config.fish ~/.config/fish/config.fish
 
 # Copy scripts
 sudo cp scripts/screenshot-* scripts/clipmenu /usr/local/bin/
@@ -63,6 +70,9 @@ The rice includes:
 - **Clipboard** — SUPER+V picker with image paste support
 - **Screenshot** — auto-save + auto-copy to clipboard
 - **Profile switcher** — Hyprland (CachyOS) vs Caelestia at login
+- **fastfetch** — CachyOS logo + system info in Material You colours
+- **Starship prompt** — git status, command duration, Material You colours
+- **Window rules** — translucent kitty, opaque browsers, floating utilities
 
 ## ⌨️ Important Keybinds
 

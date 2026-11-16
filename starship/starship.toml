@@ -1,0 +1,93 @@
+# Starship prompt — Material You colours from the active Caelestia scheme.
+# Regenerate colours after a wallpaper change (caelestia wallpaper -f <path>).
+
+add_newline = false
+
+command_timeout = 1000
+
+# ── Palette ────────────────────────────────────────────────────────────────
+# primary   #9bd0cc   secondary #b0ccc9   tertiary  #d5efff
+# error     #fa746f   outline   #6d7876   muted     #a2adac
+
+format = """
+$directory$git_branch$git_status$python$nodejs$rust$golang$java$cmd_duration$line_break\
+$character"""
+
+# ── Directory ──────────────────────────────────────────────────────────────
+[directory]
+style = "bold fg:#9bd0cc"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+home_symbol = "~"
+
+[directory.substitutions]
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+"Desktop" = "󰃨"
+"Videos" = ""
+"Config" = ""
+".config" = ""
+
+# ── Git ────────────────────────────────────────────────────────────────────
+[git_branch]
+symbol = " "
+style = "bold fg:#d5efff"
+format = "[$symbol$branch]($style)"
+
+[git_status]
+style = "fg:#fa746f"
+format = "[$all_status$ahead_behind]($style)"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+deleted = "×${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+untracked = "?${count}"
+
+# ── Languages ──────────────────────────────────────────────────────────────
+[python]
+symbol = " "
+style = "fg:#b0ccc9"
+format = "[$symbol$version]($style)"
+
+[nodejs]
+symbol = " "
+style = "fg:#b0ccc9"
+format = "[$symbol$version]($style)"
+
+[rust]
+symbol = " "
+style = "fg:#b0ccc9"
+format = "[$symbol$version]($style)"
+
+[golang]
+symbol = " "
+style = "fg:#b0ccc9"
+format = "[$symbol$version]($style)"
+
+[java]
+symbol = " "
+style = "fg:#b0ccc9"
+format = "[$symbol$version]($style)"
+
+# ── Misc ───────────────────────────────────────────────────────────────────
+[cmd_duration]
+min_time = 2000
+style = "fg:#6d7876"
+format = "[$duration]($style)"
+
+[status]
+style = "bold fg:#fa746f"
+format = "[$symbol]($style)"
+symbol = "✘"
+
+# ── Character ──────────────────────────────────────────────────────────────
+[character]
+success_symbol = "[❯](bold fg:#9bd0cc)"
+error_symbol = "[❯](bold fg:#fa746f)"
+vimcmd_symbol = "[❮](bold fg:#d5efff)"

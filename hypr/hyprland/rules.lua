@@ -171,6 +171,33 @@ tagged_rule(float_tag, {
     { class = "PandoraLauncher",    title = "Minecraft Game Output" },
 })
 
+-- Kitty (default terminal): translucent so the wallpaper blur shows through
+-- while staying readable. "override" beats the global 0.95 opacity rule.
+hl.window_rule({ match = { class = "kitty" }, opacity = "0.85 override" })
+
+-- Browsers: fully opaque keeps text crisp while scrolling
+-- "brave.*" also catches profile windows (brave-<id>-Default)
+tagged_rule(opaque_tag, {
+    "brave.*",   -- Brave (all profiles)
+    "firefox",   -- Firefox
+}, "class")
+
+-- Rendering-heavy / dense UI apps: no transparency or blur artifacts
+tagged_rule(opaque_tag, {
+    "obs|com.obsproject.Studio",   -- OBS Studio
+    "virtualbox|VirtualBox",       -- VirtualBox
+    "gns3|GNS3",                   -- GNS3
+    "ghidra|Ghidra",               -- Ghidra
+    "org.prismlauncher.PrismLauncher", -- Minecraft launcher
+}, "class")
+
+-- Small utility windows: float instead of tiling
+tagged_rule(float_tag, {
+    "org.gnome.Calculator", -- Calculator
+    "scrcpy",               -- Phone mirror
+    "org.gnome.Meld",       -- Diff viewer
+}, "class")
+
 
 -------------------------
 ---- Tag definitions ----
